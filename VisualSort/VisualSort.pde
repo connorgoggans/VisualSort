@@ -1,6 +1,6 @@
 ArrayList<Integer> BUBBLE_SORT_LIST; //<>//
-float frequency = -10.0;
-int listSize = 10;
+float frequency = 10.0;
+int listSize = 100;
 
 void setup() {
   size(1400, 800);
@@ -17,9 +17,7 @@ void setup() {
 
 void draw() {
   for (int i = 0; i < BUBBLE_SORT_LIST.size(); i++) {
-    fill(generateRed(BUBBLE_SORT_LIST.indexOf(i)), 
-      generateBlue(BUBBLE_SORT_LIST.indexOf(i)), 
-      generateGreen(BUBBLE_SORT_LIST.indexOf(i)));
+    fill(generateRed(BUBBLE_SORT_LIST.get(i)), 0, 0);
     if (i % 2 == 0) {
       triangle((-1.0*width)/(BUBBLE_SORT_LIST.size()-1), height*(1.0/3), 
         (1.0*width)/(BUBBLE_SORT_LIST.size()-1), height*(1.0/3), 
@@ -37,8 +35,9 @@ void draw() {
 
 void generateList(ArrayList<Integer> list) {
   for (int i = 0; i < listSize; i++) {
-    list.add(floor(random(255*255*255)));
+    list.add(floor(random(100000)));
   }
+  System.out.println(list);
 }
 
 /*ArrayList<Integer> generateRGB(float val) {
@@ -56,17 +55,17 @@ void generateList(ArrayList<Integer> list) {
  }*/
 
 int generateRed(float val) {
-  int red = round((sin(frequency*val)*127 + 128));
+  int red = round(val/100000 * 255);
   return red;
 }
 
 int generateBlue(float val) {
-  int blue = round((sin(frequency*val + 2)*127 + 128));
+  int blue = round((sin(frequency*(val/100000) + 3)*127 + 128));
   return blue;
 }
 
 int generateGreen(float val) {
-  int green = round((sin(frequency*val + 4)*127 + 128));
+  int green = round((sin(frequency*(val/100000) + 1)*127 + 128));
   return green;
 }
 
@@ -83,7 +82,7 @@ void bubblesort(ArrayList<Integer> list){
                                  temp = list.get(j-1);  
                                  list.set(j-1,list.get(j));
                                  list.set(j, temp);
-                                 //Redraw
+                                 redraw();
                          }  
                           
                  }  
@@ -107,6 +106,6 @@ void selectionSort(ArrayList<Integer> list){
             int temp = list.get(k);
             list.set(k, list.get(minIndex) );
             list.set(minIndex, temp );
-            System.out.println(list); //redraw
+            redraw();
         }
 }
