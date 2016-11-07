@@ -1,23 +1,38 @@
 ArrayList<Integer> BUBBLE_SORT_LIST; //<>//
-float frequency = 10.0;
-int listSize = 100;
+int listSize = 20;
+float frequency = 5/((float)listSize);
+ArrayList<ArrayList<Integer>> steps;
+ArrayList<Integer> done;
+int counter;
+String sortType = "bubble";
 
 void setup() {
+  
   size(1400, 800);
 
   background(0);
 
   BUBBLE_SORT_LIST = new ArrayList<Integer>();
+  done = new ArrayList<Integer>();
+  steps = new ArrayList<ArrayList<Integer>>();
   generateList(BUBBLE_SORT_LIST);
+  ArrayList<Integer> temp = copy(BUBBLE_SORT_LIST);
+  steps.add(BUBBLE_SORT_LIST);
+  if(sortType.equals("bubble")){
+    bubblesort(BUBBLE_SORT_LIST);
+  }else{
+    selectionSort(BUBBLE_SORT_LIST);
+  }
+  done = copy(BUBBLE_SORT_LIST);
+  BUBBLE_SORT_LIST= copy(temp);
 
   noLoop();
-  
-  redraw();
 }
 
 void draw() {
+  background(0);
   for (int i = 0; i < BUBBLE_SORT_LIST.size(); i++) {
-    fill(generateRed(BUBBLE_SORT_LIST.get(i)), 0, 0);
+    fill(generateRed(done.indexOf(BUBBLE_SORT_LIST.get(i))), generateGreen(done.indexOf(BUBBLE_SORT_LIST.get(i))),generateBlue(done.indexOf(BUBBLE_SORT_LIST.get(i)))); //<>//
     if (i % 2 == 0) {
       triangle((-1.0*width)/(BUBBLE_SORT_LIST.size()-1), height*(1.0/3), 
         (1.0*width)/(BUBBLE_SORT_LIST.size()-1), height*(1.0/3), 
@@ -30,46 +45,29 @@ void draw() {
     }
     translate(floor(((1.0*width)/(BUBBLE_SORT_LIST.size()-1))), 0);
   }
-  
 }
 
 void generateList(ArrayList<Integer> list) {
   for (int i = 0; i < listSize; i++) {
-    list.add(floor(random(100000)));
+    list.add(floor(random(listSize)));
   }
   System.out.println(list);
 }
 
-/*ArrayList<Integer> generateRGB(float val) {
- 
- int red = (int)(sin(frequency*val)*127 + 128);
- int blue = (int)(sin(frequency*val + 2)*127 + 128);
- int green = (int)(sin(frequency*val + 4)*127 + 128);
- 
- ArrayList<Integer> temp = new ArrayList<Integer>();
- temp.add(red);
- temp.add(blue);
- temp.add(green);
- 
- return temp;
- }*/
-
-int generateRed(float val) {
-  int red = round(val/100000 * 255);
-  return red;
+int generateRed(int i) {
+  float red = sin(frequency * i + 0) * (127) + 128;
+  return floor(red); //<>//
 }
 
-int generateBlue(float val) {
-  int blue = round((sin(frequency*(val/100000) + 3)*127 + 128));
-  return blue;
+int generateBlue(int i) {
+  float blue = sin(frequency * i + 3) * (127) + 128;
+  return floor(blue); //<>//
 }
 
-int generateGreen(float val) {
-  int green = round((sin(frequency*(val/100000) + 1)*127 + 128));
-  return green;
+int generateGreen(int i) {
+  float green = sin(frequency * i + 1) * (127) + 128;
+  return floor(green); //<>//
 }
-
-
 
 //Sorts under here
 void bubblesort(ArrayList<Integer> list){
@@ -82,7 +80,8 @@ void bubblesort(ArrayList<Integer> list){
                                  temp = list.get(j-1);  
                                  list.set(j-1,list.get(j));
                                  list.set(j, temp);
-                                 redraw();
+
+                                 steps.add(copy(list));
                          }  
                           
                  }  
@@ -106,6 +105,29 @@ void selectionSort(ArrayList<Integer> list){
             int temp = list.get(k);
             list.set(k, list.get(minIndex) );
             list.set(minIndex, temp );
-            redraw();
+            
+            steps.add(copy(list)); 
         }
+}
+
+void mousePressed() {
+  if(counter == 0){
+    counter++;
+    redraw();
+  }else if(counter < steps.size()){
+    BUBBLE_SORT_LIST = steps.get(counter);
+    counter++;
+    redraw();
+  } else {
+    loop();
+  } //<>//
+  
+}
+
+ArrayList<Integer> copy(ArrayList<Integer> or){
+ ArrayList<Integer> l1 = new ArrayList<Integer>();
+ for(Integer i: or){
+   l1.add(i);
+ }
+ return l1;
 }
