@@ -1,10 +1,10 @@
 ArrayList<Integer> BUBBLE_SORT_LIST; //<>//
-int listSize = 20;
+int listSize = 50;
 float frequency = 5/((float)listSize);
 ArrayList<ArrayList<Integer>> steps;
 ArrayList<Integer> done;
 int counter;
-String sortType = "bubble";
+String sortType = "selection";
 
 void setup() {
   
